@@ -1,2 +1,4 @@
 .env
-node_modules 
+.replit
+node_modules
+dist
