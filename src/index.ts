@@ -1,12 +1,14 @@
 import express, { Express, Request, Response } from 'express'
+import multer from 'multer'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import path from 'path'
 
+
 // init project
 dotenv.config()
 const app: Express = express()
-const router = express.Router()
+const upload = multer({ dest: 'uploads/' })
 const port = process.env.PORT || 3000
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
@@ -25,8 +27,14 @@ app.get('/', function (_req: Request, res: Response) {
     res.sendFile(path.join(__dirname, '../views/index.html'))
 })
 
-// Use Router
-// app.use('/api/', Routes.routes(router))
+// File analyzer route
+app.post('/api/fileanalyse', upload.single("upfile"), function (req: Request, res: Response) {
+    res.json({
+        name: req.file?.originalname,
+        type: req.file?.mimetype,
+        size: req.file?.size,
+    })
+})
 
 // listen for requests :)
 app.listen(port, function () {
